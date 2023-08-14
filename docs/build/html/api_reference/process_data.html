@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>波动率数据接口 &#8212; VolSurface 0.0.1a 文档</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="波动率模型" href="../volatility_model/model_description.html" />
+    <link rel="prev" title="Volatility Data Example" href="../example/api_example.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-process_vol.ProcessVol">
+<span id="id1"></span><h1>波动率数据接口<a class="headerlink" href="#module-process_vol.ProcessVol" title="此标题的永久链接">¶</a></h1>
+<p>Description:
+This script aims to fetch market data stored in MongoDB</p>
+<ol class="arabic simple">
+<li><p>fetch market data stored in database</p></li>
+<li><p>given ttm rule, calculate implied volatility</p></li>
+<li><p>from the corresponding implied volatility, fit svi</p></li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="process_vol.ProcessVol.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underlying_code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exchange_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#process_vol.ProcessVol.__init__" title="永久链接至目标">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>date</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><em>str</em></a>) – “yyyymmdd”</p></li>
+<li><p><strong>underlying_code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><em>str</em></a>) – underlying code</p></li>
+<li><p><strong>exchange_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><em>str</em></a>) – exchange name</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="process_vol.ProcessVol.get_volatility">
+<span class="sig-name descname"><span class="pre">get_volatility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ttm_rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_trading_days</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">244.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#process_vol.ProcessVol.get_volatility" title="永久链接至目标">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="（在 Python v3.11）"><em>float</em></a>) – risk free rate</p></li>
+<li><p><strong>ttm_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="（在 Python v3.11）"><em>str</em></a>) – ‘calendar_day’ or ‘trading_day’</p></li>
+<li><p><strong>total_trading_days</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="（在 Python v3.11）"><em>float</em></a>) – specify total trading days in a year</p></li>
+<li><p><strong>export_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="（在 Python v3.11）"><em>bool</em></a>) – choose whether to export volatility data</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>iv_table, svi_table</strong></p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">VolSurface</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../wiki.html">期权Wiki</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/api_example.html">使用示例</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">接口文档</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#process_vol.ProcessVol.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#process_vol.ProcessVol.get_volatility"><code class="docutils literal notranslate"><span class="pre">get_volatility()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../volatility_model/model_description.html">波动率模型</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../example/api_example.html" title="上一章">Volatility Data Example</a></li>
+      <li>Next: <a href="../volatility_model/model_description.html" title="下一章">波动率模型</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Yu Lu.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api_reference/process_data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

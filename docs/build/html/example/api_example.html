@@ -1,0 +1,1144 @@
+
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Volatility Data Example &#8212; VolSurface 0.0.1a 文档</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="波动率数据接口" href="../api_reference/process_data.html" />
+    <link rel="prev" title="金融期权" href="../wiki/financial_option_info.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="Volatility-Data-Example">
+<h1>Volatility Data Example<a class="headerlink" href="#Volatility-Data-Example" title="此标题的永久链接">¶</a></h1>
+<p>波动率数据的对象为</p>
+<p><code class="docutils literal notranslate"><span class="pre">ProcessVol(date,</span> <span class="pre">underlying_code,</span> <span class="pre">exchange_name)</span></code></p>
+<p>其中，</p>
+<ul class="simple">
+<li><p><em>date</em>: 指定日期，日期的格式为 <strong>yyyymmdd</strong></p></li>
+<li><p><em>underlying_code</em>： 指定标的代码</p></li>
+<li><p><em>exchange_name</em> : 指定交易所名称</p></li>
+</ul>
+<p>返回隐含波动率和SVI数据的接口为</p>
+<p><code class="docutils literal notranslate"><span class="pre">get_volatility(rf,</span> <span class="pre">ttm_rule,</span> <span class="pre">total_trading_days=244.0,</span> <span class="pre">export_data=False)</span></code></p>
+<p>其中，</p>
+<ul class="simple">
+<li><p><em>rf</em>: 指定无风险利率</p></li>
+<li><p><em>ttm_rule</em>: 指定到期日类型， 交易日<code class="docutils literal notranslate"><span class="pre">trading_day</span></code>或者日历日<code class="docutils literal notranslate"><span class="pre">calendar_day</span></code></p></li>
+<li><p><em>total_trading_day</em>: 指定年交易日天数，默认值为244.0</p></li>
+<li><p><em>total_data</em>: 是否导出csv文件，默认为<code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+<p>返回 - <em>iv_table</em>, <em>svi_table</em>: <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;../../../process_data&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<section id="金融期权波动率数据">
+<h2>金融期权波动率数据<a class="headerlink" href="#金融期权波动率数据" title="此标题的永久链接">¶</a></h2>
+<p>以2023年7月24日的沪深300ETF期权波动率数据为例，挂钩标的为510300。</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">process_vol</span> <span class="kn">import</span> <span class="n">ProcessVol</span>
+<span class="n">financial_vol</span> <span class="o">=</span> <span class="n">ProcessVol</span><span class="p">(</span><span class="s2">&quot;20230724&quot;</span><span class="p">,</span> <span class="s2">&quot;510300&quot;</span><span class="p">,</span> <span class="s2">&quot;SSE&quot;</span><span class="p">)</span>
+<span class="n">iv_table</span><span class="p">,</span> <span class="n">svi_table</span> <span class="o">=</span> <span class="n">financial_vol</span><span class="o">.</span><span class="n">get_volatility</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="s1">&#39;calendar_day&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 3.619293448883624e-08
+            Iterations: 77
+            Function evaluations: 482
+            Gradient evaluations: 77
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 6.3650873914804566e-09
+            Iterations: 80
+            Function evaluations: 523
+            Gradient evaluations: 80
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 1.6101243625159155e-09
+            Iterations: 106
+            Function evaluations: 723
+            Gradient evaluations: 106
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 1.5550181624470703e-07
+            Iterations: 11
+            Function evaluations: 78
+            Gradient evaluations: 11
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/quant/anaconda3/envs/optlib/lib/python3.10/site-packages/scipy/optimize/_optimize.py:284: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  warnings.warn(&#34;Values in x were outside bounds during a &#34;
+</pre></div></div>
+</div>
+<section id="波动率数据展示">
+<h3>波动率数据展示<a class="headerlink" href="#波动率数据展示" title="此标题的永久链接">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iv_table</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>3.5</th>
+      <th>3.6</th>
+      <th>3.7</th>
+      <th>3.8</th>
+      <th>3.9</th>
+      <th>4.0</th>
+      <th>4.1</th>
+      <th>4.2</th>
+      <th>4.3</th>
+      <th>4.4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20230726</th>
+      <td>0.485776</td>
+      <td>0.359077</td>
+      <td>0.257613</td>
+      <td>0.1843</td>
+      <td>0.16025</td>
+      <td>0.206844</td>
+      <td>0.288173</td>
+      <td>0.396538</td>
+      <td>0.498704</td>
+      <td>0.602429</td>
+    </tr>
+    <tr>
+      <th>20230823</th>
+      <td>0.170441</td>
+      <td>0.159535</td>
+      <td>0.152075</td>
+      <td>0.143792</td>
+      <td>0.140949</td>
+      <td>0.141182</td>
+      <td>0.14286</td>
+      <td>0.151572</td>
+      <td>0.155464</td>
+      <td>0.179361</td>
+    </tr>
+    <tr>
+      <th>20230927</th>
+      <td>0.156521</td>
+      <td>0.151989</td>
+      <td>0.146252</td>
+      <td>0.145681</td>
+      <td>0.144706</td>
+      <td>0.144439</td>
+      <td>0.144926</td>
+      <td>0.148372</td>
+      <td>0.154009</td>
+      <td>0.159981</td>
+    </tr>
+    <tr>
+      <th>20231227</th>
+      <td>0.154884</td>
+      <td>0.15053</td>
+      <td>0.149054</td>
+      <td>0.14825</td>
+      <td>0.148971</td>
+      <td>0.148806</td>
+      <td>0.14993</td>
+      <td>0.151679</td>
+      <td>0.15393</td>
+      <td>0.15785</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">svi_table</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>3.50</th>
+      <th>3.51</th>
+      <th>3.52</th>
+      <th>3.53</th>
+      <th>3.54</th>
+      <th>3.55</th>
+      <th>3.56</th>
+      <th>3.57</th>
+      <th>3.58</th>
+      <th>3.59</th>
+      <th>...</th>
+      <th>4.32</th>
+      <th>4.33</th>
+      <th>4.34</th>
+      <th>4.35</th>
+      <th>4.36</th>
+      <th>4.37</th>
+      <th>4.38</th>
+      <th>4.39</th>
+      <th>4.40</th>
+      <th>4.41</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20230726</th>
+      <td>0.452722</td>
+      <td>0.446467</td>
+      <td>0.440142</td>
+      <td>0.433742</td>
+      <td>0.427265</td>
+      <td>0.420707</td>
+      <td>0.414064</td>
+      <td>0.407332</td>
+      <td>0.400506</td>
+      <td>0.393581</td>
+      <td>...</td>
+      <td>0.509179</td>
+      <td>0.51439</td>
+      <td>0.519537</td>
+      <td>0.524622</td>
+      <td>0.529647</td>
+      <td>0.534612</td>
+      <td>0.539521</td>
+      <td>0.544375</td>
+      <td>0.549175</td>
+      <td>0.553923</td>
+    </tr>
+    <tr>
+      <th>20230823</th>
+      <td>0.168894</td>
+      <td>0.168066</td>
+      <td>0.16724</td>
+      <td>0.166415</td>
+      <td>0.165591</td>
+      <td>0.164769</td>
+      <td>0.16395</td>
+      <td>0.163132</td>
+      <td>0.162317</td>
+      <td>0.161504</td>
+      <td>...</td>
+      <td>0.165163</td>
+      <td>0.166368</td>
+      <td>0.167575</td>
+      <td>0.168781</td>
+      <td>0.169988</td>
+      <td>0.171193</td>
+      <td>0.172396</td>
+      <td>0.173598</td>
+      <td>0.174796</td>
+      <td>0.175991</td>
+    </tr>
+    <tr>
+      <th>20230927</th>
+      <td>0.156119</td>
+      <td>0.155659</td>
+      <td>0.155205</td>
+      <td>0.154755</td>
+      <td>0.154311</td>
+      <td>0.153872</td>
+      <td>0.153438</td>
+      <td>0.15301</td>
+      <td>0.152588</td>
+      <td>0.152172</td>
+      <td>...</td>
+      <td>0.155005</td>
+      <td>0.155573</td>
+      <td>0.156149</td>
+      <td>0.156734</td>
+      <td>0.157325</td>
+      <td>0.157924</td>
+      <td>0.15853</td>
+      <td>0.159141</td>
+      <td>0.159759</td>
+      <td>0.160383</td>
+    </tr>
+    <tr>
+      <th>20231227</th>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>0.151419</td>
+      <td>...</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+      <td>0.151418</td>
+    </tr>
+  </tbody>
+</table>
+<p>4 rows × 92 columns</p>
+</div></div>
+</div>
+</section>
+</section>
+<section id="商品期权波动率数据">
+<h2>商品期权波动率数据<a class="headerlink" href="#商品期权波动率数据" title="此标题的永久链接">¶</a></h2>
+<p>以2023年7月24日的聚乙烯期权为例</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commodity_vol</span> <span class="o">=</span> <span class="n">ProcessVol</span><span class="p">(</span><span class="s2">&quot;20230726&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;DCE&quot;</span><span class="p">)</span>
+<span class="n">iv_table</span><span class="p">,</span> <span class="n">svi_table</span> <span class="o">=</span> <span class="n">commodity_vol</span><span class="o">.</span><span class="n">get_volatility</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="s1">&#39;calendar_day&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/quant/anaconda3/envs/optlib/lib/python3.10/site-packages/scipy/optimize/_optimize.py:284: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  warnings.warn(&#34;Values in x were outside bounds during a &#34;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Positive directional derivative for linesearch    (Exit mode 8)
+            Current function value: 3.859755670883116e-07
+            Iterations: 62
+            Function evaluations: 394
+            Gradient evaluations: 58
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 2.058629815308245e-07
+            Iterations: 62
+            Function evaluations: 424
+            Gradient evaluations: 62
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 7.000296658645858e-08
+            Iterations: 67
+            Function evaluations: 414
+            Gradient evaluations: 67
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 5.6457346980952124e-08
+            Iterations: 65
+            Function evaluations: 404
+            Gradient evaluations: 65
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 3.693927639352392e-08
+            Iterations: 64
+            Function evaluations: 386
+            Gradient evaluations: 64
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 1.2687613797673606e-08
+            Iterations: 65
+            Function evaluations: 396
+            Gradient evaluations: 65
+Iteration limit reached    (Exit mode 9)
+            Current function value: 9.481014597560195e-09
+            Iterations: 1000
+            Function evaluations: 13282
+            Gradient evaluations: 999
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 8.258936063961467e-09
+            Iterations: 73
+            Function evaluations: 444
+            Gradient evaluations: 73
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 6.463990121913501e-09
+            Iterations: 87
+            Function evaluations: 615
+            Gradient evaluations: 87
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 5.479624632190729e-09
+            Iterations: 79
+            Function evaluations: 483
+            Gradient evaluations: 79
+Optimization terminated successfully    (Exit mode 0)
+            Current function value: 4.062062308934544e-09
+            Iterations: 87
+            Function evaluations: 540
+            Gradient evaluations: 87
+</pre></div></div>
+</div>
+<section id="id4">
+<h3>波动率数据展示<a class="headerlink" href="#id4" title="此标题的永久链接">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iv_table</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>7100.0</th>
+      <th>7200.0</th>
+      <th>7300.0</th>
+      <th>7400.0</th>
+      <th>7500.0</th>
+      <th>7600.0</th>
+      <th>7700.0</th>
+      <th>7800.0</th>
+      <th>7900.0</th>
+      <th>8000.0</th>
+      <th>8100.0</th>
+      <th>8200.0</th>
+      <th>8300.0</th>
+      <th>8400.0</th>
+      <th>8500.0</th>
+      <th>8600.0</th>
+      <th>8700.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20230807</th>
+      <td>0.445863</td>
+      <td>0.402127</td>
+      <td>0.359504</td>
+      <td>0.317914</td>
+      <td>0.279954</td>
+      <td>0.240032</td>
+      <td>0.203141</td>
+      <td>0.178672</td>
+      <td>0.142575</td>
+      <td>0.122942</td>
+      <td>0.117599</td>
+      <td>0.121142</td>
+      <td>0.128458</td>
+      <td>0.142483</td>
+      <td>0.154601</td>
+      <td>0.163856</td>
+      <td>0.181844</td>
+    </tr>
+    <tr>
+      <th>20230907</th>
+      <td>0.269966</td>
+      <td>0.246217</td>
+      <td>0.222838</td>
+      <td>0.202008</td>
+      <td>0.184172</td>
+      <td>0.169899</td>
+      <td>0.158302</td>
+      <td>0.150774</td>
+      <td>0.145299</td>
+      <td>0.141661</td>
+      <td>0.139141</td>
+      <td>0.137403</td>
+      <td>0.135947</td>
+      <td>0.134929</td>
+      <td>0.13398</td>
+      <td>0.133102</td>
+      <td>0.13235</td>
+    </tr>
+    <tr>
+      <th>20231013</th>
+      <td>0.223734</td>
+      <td>0.208137</td>
+      <td>0.193709</td>
+      <td>0.181375</td>
+      <td>0.170933</td>
+      <td>0.162395</td>
+      <td>0.155895</td>
+      <td>0.151068</td>
+      <td>0.147208</td>
+      <td>0.144376</td>
+      <td>0.142089</td>
+      <td>0.140384</td>
+      <td>0.138904</td>
+      <td>0.13786</td>
+      <td>0.136801</td>
+      <td>0.136242</td>
+      <td>0.135497</td>
+    </tr>
+    <tr>
+      <th>20231107</th>
+      <td>0.207899</td>
+      <td>0.194526</td>
+      <td>0.182473</td>
+      <td>0.172203</td>
+      <td>0.163555</td>
+      <td>0.156421</td>
+      <td>0.150864</td>
+      <td>0.14632</td>
+      <td>0.142758</td>
+      <td>0.140103</td>
+      <td>0.137788</td>
+      <td>0.13611</td>
+      <td>0.134658</td>
+      <td>0.133385</td>
+      <td>0.132398</td>
+      <td>0.131596</td>
+      <td>0.13081</td>
+    </tr>
+    <tr>
+      <th>20231207</th>
+      <td>0.197527</td>
+      <td>0.186528</td>
+      <td>0.176667</td>
+      <td>0.168375</td>
+      <td>0.161647</td>
+      <td>0.155666</td>
+      <td>0.151018</td>
+      <td>0.147295</td>
+      <td>0.144001</td>
+      <td>0.141632</td>
+      <td>0.139448</td>
+      <td>0.137625</td>
+      <td>0.136279</td>
+      <td>0.135052</td>
+      <td>0.133983</td>
+      <td>0.133128</td>
+      <td>0.132368</td>
+    </tr>
+    <tr>
+      <th>20240109</th>
+      <td>0.193768</td>
+      <td>0.185456</td>
+      <td>0.178299</td>
+      <td>0.172099</td>
+      <td>0.167016</td>
+      <td>0.162511</td>
+      <td>0.158796</td>
+      <td>0.15579</td>
+      <td>0.15306</td>
+      <td>0.150895</td>
+      <td>0.149049</td>
+      <td>0.147495</td>
+      <td>0.146264</td>
+      <td>0.145118</td>
+      <td>0.144105</td>
+      <td>0.143079</td>
+      <td>0.142397</td>
+    </tr>
+    <tr>
+      <th>20240207</th>
+      <td>0.190009</td>
+      <td>0.182853</td>
+      <td>0.17661</td>
+      <td>0.171243</td>
+      <td>0.166629</td>
+      <td>0.162705</td>
+      <td>0.1594</td>
+      <td>0.156596</td>
+      <td>0.154117</td>
+      <td>0.152047</td>
+      <td>0.150221</td>
+      <td>0.14873</td>
+      <td>0.147415</td>
+      <td>0.146297</td>
+      <td>0.145316</td>
+      <td>0.144318</td>
+      <td>0.143492</td>
+    </tr>
+    <tr>
+      <th>20240307</th>
+      <td>0.189295</td>
+      <td>0.182725</td>
+      <td>0.176938</td>
+      <td>0.172113</td>
+      <td>0.167698</td>
+      <td>0.163999</td>
+      <td>0.160733</td>
+      <td>0.158018</td>
+      <td>0.155682</td>
+      <td>0.15367</td>
+      <td>0.151816</td>
+      <td>0.150224</td>
+      <td>0.14889</td>
+      <td>0.147698</td>
+      <td>0.146665</td>
+      <td>0.145811</td>
+      <td>0.144966</td>
+    </tr>
+    <tr>
+      <th>20240408</th>
+      <td>0.186512</td>
+      <td>0.180812</td>
+      <td>0.175584</td>
+      <td>0.171161</td>
+      <td>0.167381</td>
+      <td>0.163938</td>
+      <td>0.161044</td>
+      <td>0.158494</td>
+      <td>0.156273</td>
+      <td>0.154422</td>
+      <td>0.152641</td>
+      <td>0.151201</td>
+      <td>0.149886</td>
+      <td>0.148656</td>
+      <td>0.147611</td>
+      <td>0.146794</td>
+      <td>0.145991</td>
+    </tr>
+    <tr>
+      <th>20240510</th>
+      <td>0.185478</td>
+      <td>0.180325</td>
+      <td>0.175516</td>
+      <td>0.171423</td>
+      <td>0.167796</td>
+      <td>0.164642</td>
+      <td>0.161958</td>
+      <td>0.159428</td>
+      <td>0.157291</td>
+      <td>0.155503</td>
+      <td>0.153764</td>
+      <td>0.152271</td>
+      <td>0.150952</td>
+      <td>0.149849</td>
+      <td>0.148828</td>
+      <td>0.147807</td>
+      <td>0.147009</td>
+    </tr>
+    <tr>
+      <th>20240607</th>
+      <td>0.183513</td>
+      <td>0.178693</td>
+      <td>0.174436</td>
+      <td>0.170713</td>
+      <td>0.167343</td>
+      <td>0.164519</td>
+      <td>0.161923</td>
+      <td>0.159608</td>
+      <td>0.157613</td>
+      <td>0.155826</td>
+      <td>0.15425</td>
+      <td>0.152862</td>
+      <td>0.151634</td>
+      <td>0.150504</td>
+      <td>0.149527</td>
+      <td>0.148572</td>
+      <td>0.147762</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">svi_table</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>7100.00</th>
+      <th>7100.01</th>
+      <th>7100.02</th>
+      <th>7100.03</th>
+      <th>7100.04</th>
+      <th>7100.05</th>
+      <th>7100.06</th>
+      <th>7100.07</th>
+      <th>7100.08</th>
+      <th>7100.09</th>
+      <th>...</th>
+      <th>8699.92</th>
+      <th>8699.93</th>
+      <th>8699.94</th>
+      <th>8699.95</th>
+      <th>8699.96</th>
+      <th>8699.97</th>
+      <th>8699.98</th>
+      <th>8699.99</th>
+      <th>8700.00</th>
+      <th>8700.01</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20230807</th>
+      <td>0.391073</td>
+      <td>0.391071</td>
+      <td>0.39107</td>
+      <td>0.391068</td>
+      <td>0.391066</td>
+      <td>0.391064</td>
+      <td>0.391062</td>
+      <td>0.39106</td>
+      <td>0.391059</td>
+      <td>0.391057</td>
+      <td>...</td>
+      <td>0.177505</td>
+      <td>0.177506</td>
+      <td>0.177507</td>
+      <td>0.177508</td>
+      <td>0.177509</td>
+      <td>0.17751</td>
+      <td>0.177511</td>
+      <td>0.177512</td>
+      <td>0.177513</td>
+      <td>0.177514</td>
+    </tr>
+    <tr>
+      <th>20230907</th>
+      <td>0.249385</td>
+      <td>0.249384</td>
+      <td>0.249382</td>
+      <td>0.249381</td>
+      <td>0.24938</td>
+      <td>0.249379</td>
+      <td>0.249378</td>
+      <td>0.249377</td>
+      <td>0.249376</td>
+      <td>0.249374</td>
+      <td>...</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+      <td>0.136192</td>
+    </tr>
+    <tr>
+      <th>20231013</th>
+      <td>0.216114</td>
+      <td>0.216113</td>
+      <td>0.216112</td>
+      <td>0.216111</td>
+      <td>0.21611</td>
+      <td>0.21611</td>
+      <td>0.216109</td>
+      <td>0.216108</td>
+      <td>0.216107</td>
+      <td>0.216106</td>
+      <td>...</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+      <td>0.138277</td>
+    </tr>
+    <tr>
+      <th>20231107</th>
+      <td>0.202398</td>
+      <td>0.202397</td>
+      <td>0.202397</td>
+      <td>0.202396</td>
+      <td>0.202395</td>
+      <td>0.202394</td>
+      <td>0.202393</td>
+      <td>0.202392</td>
+      <td>0.202391</td>
+      <td>0.202391</td>
+      <td>...</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+      <td>0.133173</td>
+    </tr>
+    <tr>
+      <th>20231207</th>
+      <td>0.19403</td>
+      <td>0.19403</td>
+      <td>0.194029</td>
+      <td>0.194028</td>
+      <td>0.194027</td>
+      <td>0.194027</td>
+      <td>0.194026</td>
+      <td>0.194025</td>
+      <td>0.194024</td>
+      <td>0.194023</td>
+      <td>...</td>
+      <td>0.134046</td>
+      <td>0.134046</td>
+      <td>0.134046</td>
+      <td>0.134046</td>
+      <td>0.134046</td>
+      <td>0.134046</td>
+      <td>0.134045</td>
+      <td>0.134045</td>
+      <td>0.134045</td>
+      <td>0.134045</td>
+    </tr>
+    <tr>
+      <th>20240109</th>
+      <td>0.192171</td>
+      <td>0.19217</td>
+      <td>0.19217</td>
+      <td>0.192169</td>
+      <td>0.192169</td>
+      <td>0.192168</td>
+      <td>0.192167</td>
+      <td>0.192167</td>
+      <td>0.192166</td>
+      <td>0.192165</td>
+      <td>...</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+      <td>0.143293</td>
+    </tr>
+    <tr>
+      <th>20240207</th>
+      <td>0.188861</td>
+      <td>0.18886</td>
+      <td>0.188859</td>
+      <td>0.188859</td>
+      <td>0.188858</td>
+      <td>0.188858</td>
+      <td>0.188857</td>
+      <td>0.188856</td>
+      <td>0.188856</td>
+      <td>0.188855</td>
+      <td>...</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+      <td>0.144241</td>
+    </tr>
+    <tr>
+      <th>20240307</th>
+      <td>0.188353</td>
+      <td>0.188353</td>
+      <td>0.188352</td>
+      <td>0.188351</td>
+      <td>0.188351</td>
+      <td>0.18835</td>
+      <td>0.18835</td>
+      <td>0.188349</td>
+      <td>0.188349</td>
+      <td>0.188348</td>
+      <td>...</td>
+      <td>0.14552</td>
+      <td>0.14552</td>
+      <td>0.14552</td>
+      <td>0.14552</td>
+      <td>0.14552</td>
+      <td>0.14552</td>
+      <td>0.145519</td>
+      <td>0.145519</td>
+      <td>0.145519</td>
+      <td>0.145519</td>
+    </tr>
+    <tr>
+      <th>20240408</th>
+      <td>0.185825</td>
+      <td>0.185824</td>
+      <td>0.185824</td>
+      <td>0.185823</td>
+      <td>0.185822</td>
+      <td>0.185822</td>
+      <td>0.185821</td>
+      <td>0.185821</td>
+      <td>0.18582</td>
+      <td>0.18582</td>
+      <td>...</td>
+      <td>0.146406</td>
+      <td>0.146406</td>
+      <td>0.146406</td>
+      <td>0.146406</td>
+      <td>0.146406</td>
+      <td>0.146406</td>
+      <td>0.146406</td>
+      <td>0.146405</td>
+      <td>0.146405</td>
+      <td>0.146405</td>
+    </tr>
+    <tr>
+      <th>20240510</th>
+      <td>0.184944</td>
+      <td>0.184944</td>
+      <td>0.184943</td>
+      <td>0.184943</td>
+      <td>0.184942</td>
+      <td>0.184942</td>
+      <td>0.184941</td>
+      <td>0.184941</td>
+      <td>0.18494</td>
+      <td>0.18494</td>
+      <td>...</td>
+      <td>0.147395</td>
+      <td>0.147395</td>
+      <td>0.147395</td>
+      <td>0.147395</td>
+      <td>0.147395</td>
+      <td>0.147395</td>
+      <td>0.147394</td>
+      <td>0.147394</td>
+      <td>0.147394</td>
+      <td>0.147394</td>
+    </tr>
+    <tr>
+      <th>20240607</th>
+      <td>0.18305</td>
+      <td>0.18305</td>
+      <td>0.183049</td>
+      <td>0.183049</td>
+      <td>0.183048</td>
+      <td>0.183048</td>
+      <td>0.183047</td>
+      <td>0.183047</td>
+      <td>0.183047</td>
+      <td>0.183046</td>
+      <td>...</td>
+      <td>0.148081</td>
+      <td>0.148081</td>
+      <td>0.148081</td>
+      <td>0.148081</td>
+      <td>0.148081</td>
+      <td>0.14808</td>
+      <td>0.14808</td>
+      <td>0.14808</td>
+      <td>0.14808</td>
+      <td>0.14808</td>
+    </tr>
+  </tbody>
+</table>
+<p>11 rows × 160002 columns</p>
+</div></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">VolSurface</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../wiki.html">期权Wiki</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">使用示例</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#金融期权波动率数据">金融期权波动率数据</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#商品期权波动率数据">商品期权波动率数据</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/process_data.html">接口文档</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../volatility_model/model_description.html">波动率模型</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../wiki/financial_option_info.html" title="上一章">金融期权</a></li>
+      <li>Next: <a href="../api_reference/process_data.html" title="下一章">波动率数据接口</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="提交" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Yu Lu.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/example/api_example.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
