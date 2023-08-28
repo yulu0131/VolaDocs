@@ -6,7 +6,7 @@
 VolSurface
 ======================================
 
-.. warning:: This documentation updates on 14th August 2023!
+.. warning:: This documentation updates on 28th August 2023!
 
 
 .. toctree::
@@ -28,6 +28,8 @@ VolSurface
 商品期权波动率曲面界面
 ==================================
 
+.. note:: 新增Black(LogNormal)/Bachelier(Normal)SABR模型。
+
 .. image:: figures/commodity_iv.png
   :width: 700
 
@@ -37,6 +39,11 @@ VolSurface
 .. image:: figures/commodity_quasi_explicit.png
   :width: 700
 
+.. image:: figures/BLACK_SABR.png
+  :width: 700
+
+.. image:: figures/BACHELIER_SABR.png
+  :width: 700
 
 金融期权波动率曲面界面
 ==================================

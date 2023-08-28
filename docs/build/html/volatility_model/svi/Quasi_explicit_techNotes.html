@@ -1,0 +1,445 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="next" title="SVI模型" href="svi.html" /><link rel="prev" title="SVI模型" href="svi_intro.html" />
+
+    <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+        <title>Quasi-Explicit SVI技术文档 - VolSurface 0.0.1a 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">VolSurface 0.0.1a 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">VolSurface 0.0.1a 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../wiki.html">期权Wiki</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 期权Wiki</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../wiki/commodity_option_info.html">商品期权</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wiki/financial_option_info.html">金融期权</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../model_description.html">波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="svi_intro.html">SVI模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of SVI模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l3"><a class="reference internal" href="svi.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../sabr/sabr_intro.html">SABR随机波动率模型</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section class="tex2jax_ignore mathjax_ignore" id="quasi-explicit-svi">
+<h1>Quasi-Explicit SVI技术文档<a class="headerlink" href="#quasi-explicit-svi" title="此标题的永久链接">#</a></h1>
+<section id="svi">
+<h2>SVI 模型回顾<a class="headerlink" href="#svi" title="此标题的永久链接">#</a></h2>
+<p>SVI (Stochastic Volatility Inspired) 模型由 Gatheral (2004) 提出，用于描述隐含波动率的微笑形状，该模型表现形式为：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+	v(x) = \sigma_{BS}^2 (x) = a + b(\rho(x - m) + \sqrt{(x - m)^2 + \sigma^2})
+\end{equation}
+\]</div>
+</div>
+<p>其中，<span class="math notranslate nohighlight">\(x\)</span> 是对数moneyness, 即 <span class="math notranslate nohighlight">\( \log(\frac{K}{F_T})\)</span> ， <span class="math notranslate nohighlight">\(K\)</span> 为行权价， <span class="math notranslate nohighlight">\(F_T\)</span> 为到期时的标的资产的远期价格。SVI模型中的参数控制隐含波动率曲线的形态和特点，具体如下：</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(a\)</span> 表示隐含波动率的基准水平，调整 <span class="math notranslate nohighlight">\(a\)</span> 的值会导致整条曲线在垂直方向上移动;</p></li>
+<li><p><span class="math notranslate nohighlight">\(b\)</span> 表示波动率微笑的振幅，即控制曲线在左右两端渐近线之间的张开角度。<span class="math notranslate nohighlight">\(b\)</span>值的增加会减少这个角度，使曲线更为收敛;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\rho\)</span> 表示微笑的倾斜度，即曲线的整体倾斜，调整 <span class="math notranslate nohighlight">\(\rho\)</span> 的值会产生对曲线的旋转效果;</p></li>
+<li><p><span class="math notranslate nohighlight">\(m\)</span> 定义曲线的水平中心位置，修改 <span class="math notranslate nohighlight">\(m\)</span> 会导致曲线在水平方向上的整体移位;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span> 表示微笑的宽度，即决定曲线定点附近的平滑度，较大的 <span class="math notranslate nohighlight">\(\sigma\)</span> 值会使曲线在这一区域更为平缓。</p></li>
+</ul>
+<p>这些参数共同定义了隐含波动率的微笑形态，可以准确捕捉和再现市场上观察到的隐含波动率曲线。</p>
+</section>
+<section id="quasi-explicit">
+<h2>Quasi-Explicit 模型<a class="headerlink" href="#quasi-explicit" title="此标题的永久链接">#</a></h2>
+<p>在某些特定情况下，尤其是市场数据稀少或缺少远离moneyness的期权时，原始 SVI 模型有可能会产生无界隐含波动率或出现拟合失败的情形。为了解决这个问题，Zeliade Systems (2009) 提出 Quasi-Explicit SVI 模型。在 Quasi-Explicit 模型中，对上述 SVI 公式进行了改进，通过引入额外的到期日参数 <span class="math notranslate nohighlight">\(T\)</span> ，使模型更加灵活，并能够提供相对稳健的参数估计值进而适应各种市场条件。</p>
+<p>Quasi-Explicit 是SVI的另一种形式，更适合于参数校准，对参数的定义与SVI原始公式略有不同：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+y (x) = \frac{x - m}{\sigma}
+\]</div>
+</div>
+<p>Zeliade Systems (2009) 强调波动率的总方差 <span class="math notranslate nohighlight">\( \tilde{v} = T v\)</span> ， 因此SVI 参数形式转换为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+v (x) = a T + b\sigma T (\rho y + \sqrt{y^2 + 1})
+\]</div>
+</div>
+<p>此表达式清晰地展示了，对于固定的 <span class="math notranslate nohighlight">\(m\)</span> 和 <span class="math notranslate nohighlight">\(\sigma\)</span> 值，<span class="math notranslate nohighlight">\(Tv\)</span> 曲线能够完全由 <span class="math notranslate nohighlight">\(a\)</span>， <span class="math notranslate nohighlight">\(\rho\)</span> 以及 乘积 <span class="math notranslate nohighlight">\(b\sigma\)</span>  决定。因此，若重新定义参数为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+	c &amp; = b \sigma T \\
+	d &amp; = \rho b \sigma T \\
+	\tilde{a} &amp;= aT
+\end{aligned}
+\end{split}\]</div>
+</div>
+<p>那么， <span class="math notranslate nohighlight">\(\tilde{v}(y)\)</span> 呈线性依赖于 <span class="math notranslate nohighlight">\(c\)</span>， <span class="math notranslate nohighlight">\(d\)</span> ， <span class="math notranslate nohighlight">\(a\)</span> :</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+ 	\tilde{v}(y) = \tilde{a} + dy + c \sqrt{y^2 + 1}
+\end{equation}
+\]</div>
+</div>
+<section id="id1">
+<h3>内层优化<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h3>
+<p>因此，对于固定值 <span class="math notranslate nohighlight">\(m\)</span> 和 <span class="math notranslate nohighlight">\(\sigma\)</span>，求解问题：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+	(P_{m, \sigma}) \min_{(c, d, \tilde{a}) \in D} f_{y_i, v_i}(c, d, \tilde{a})
+\end{equation}
+\]</div>
+</div>
+<p>其中，<span class="math notranslate nohighlight">\(f{y_i, v_i}\)</span>为成本函数</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    f_{y_i, vi}(c , d, \tilde{a})  &amp;= f (c, d, \tilde{a}) = \sum_{i = 1}^n(\tilde{v}(y_i) - \tilde{v_i})^2 \\
+    \tilde{v_i} &amp;= Tv_i \\ 
+\end{aligned}
+\end{split}\]</div>
+</div>
+<p><span class="math notranslate nohighlight">\((c, d, \tilde{a})\)</span> 的定义域 <span class="math notranslate nohighlight">\(D\)</span> 为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+D = 
+\begin{cases}
+	0 \leq c \leq 5\sigma \\
+	\mid d \mid \leq c \space\text{and}\space \mid d \mid \leq 4\sigma -c \\
+	0 \leq \tilde{a} \leq \max_i(\tilde{v_i})
+\end{cases}
+\end{split}\]</div>
+</div>
+</section>
+<section id="id2">
+<h3>外层优化<a class="headerlink" href="#id2" title="此标题的永久链接">#</a></h3>
+<p>设 <span class="math notranslate nohighlight">\((c^*, d^*, \tilde{a}^*)\)</span> 代表 <span class="math notranslate nohighlight">\(P_{m,\sigma}\)</span>的解，并且 <span class="math notranslate nohighlight">\((a^*, b^*, \rho ^*)\)</span> 为对应三元组 <span class="math notranslate nohighlight">\((a, b, \rho)\)</span>， 那么完整的模型校准问题可表示为</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\begin{equation}
+	(P) \space \space \min_{m, \sigma} \sum_{i = 1}{n}(v_{m, \sigma, a^*, b^*, \rho^*}(x_i) - v_i^2)
+\end{equation}
+\]</div>
+</div>
+<p>到这一步骤之后，剩下的唯一任务即为求解二维方程 <span class="math notranslate nohighlight">\(P_{m, \sigma}\)</span> 。</p>
+<section id="id3">
+<h4>降维问题的闭式解<a class="headerlink" href="#id3" title="此标题的永久链接">#</a></h4>
+<p><span class="math notranslate nohighlight">\(P_{m, \sigma}\)</span> 是一个有着线性规划的凸优化问题，在容许域 <span class="math notranslate nohighlight">\(D\)</span> 中定义的所有约束条件均为线性的。显而易见，该方程有一个显示解。在外层优化中，由于成本函数 <span class="math notranslate nohighlight">\(f\)</span> 是关于 <span class="math notranslate nohighlight">\((\sigma, m)\)</span> 的非线性函数，<span class="math notranslate nohighlight">\(f\)</span> 会出现多个局部最小值。</p>
+<p>针对外层优化，Zeliade Systems (2009) 推荐 Nelder-Mead Simplex (1965) 算法。在外层优化中，采用Nelder-Mead Simplex算法具有明显优势。该算法是一个无约束优化算法，能够处理非线性、非平滑的目标函数。其次，该方法不需要目标函数的导数信息，特别适用于导数难以计算或不存在的情形。另外，通过使用单纯形法的迭代搜索策略，它能够有效地搜索和收敛到函数的局部最小值。而且，Nelder-Mead 方法在多维度参数空间中表现稳健，尤其是在初值选择不是非常接近最优解的情况下，在实际外层优化问题中应用广泛  (Gao and Han, 2010)。</p>
+</section>
+</section>
+<section id="id4">
+<h3>实证分析<a class="headerlink" href="#id4" title="此标题的永久链接">#</a></h3>
+<section id="d">
+<h4>2D波动率曲线<a class="headerlink" href="#d" title="此标题的永久链接">#</a></h4>
+<p>测试数据为2023年7月26日l2309期权的隐含波动率为例，日历日到期时长为 <code class="docutils literal notranslate"><span class="pre">43.0</span></code>， 无风险利率为<code class="docutils literal notranslate"><span class="pre">0.02</span></code>。</p>
+<p>Quasi-SVI、SVI以及隐含波动率的对比结果如下：</p>
+<p><img alt="2D" src="../../_images/2D_comp.png" /></p>
+</section>
+<section id="id5">
+<h4>3D波动率曲面<a class="headerlink" href="#id5" title="此标题的永久链接">#</a></h4>
+<p>测试数据为2023年7月26日聚乙烯期权的隐含波动率为例，日历日到期时长为 <code class="docutils literal notranslate"><span class="pre">43.0</span></code>， 无风险利率为<code class="docutils literal notranslate"><span class="pre">0.02</span></code>。</p>
+<p>隐含波动率曲面如下：</p>
+<p><img alt="iv" src="../../_images/market_iv.png" /></p>
+<p>原始SVI波动率曲面如下：</p>
+<p><img alt="svi" src="../../_images/SVI_original.png" /></p>
+<p>Quasi-explicit波动率曲面如下：</p>
+<p><img alt="Quasi-Explicit" src="../../_images/quasi_explicit.png" /></p>
+</section>
+</section>
+</section>
+<section id="id6">
+<h2>总结<a class="headerlink" href="#id6" title="此标题的永久链接">#</a></h2>
+<p>Quasi-Explicit SVI 在原始SVI的基础上，引入对到期日 <span class="math notranslate nohighlight">\(T\)</span> 的考虑，使得模型更加稳健并能够适应市场变化。其模型校准过程中同时考虑了全局和局部优化，确保能够更准确地捕捉市场上的隐含波动率曲线。</p>
+</section>
+<section id="id7">
+<h2>参考文献<a class="headerlink" href="#id7" title="此标题的永久链接">#</a></h2>
+<ol class="arabic simple">
+<li><p>Gao, F. and Han, L. (2010) ‘Implementing the Nelder-Mead simplex algorithm with adaptive parameters’, <em>Computational Optimization and Applications</em>, 51(1), pp. 259-277.</p></li>
+<li><p>Gatheral, J. (2004) ‘A parsimonious arbitrage-free implied volatility parameterization with application to the valuation of volatility derivatives’, Presentation at Global Derivatives &amp; Risk Management, Madrid.</p></li>
+<li><p>Nelder, J.A. and Mead, R. (1965) ‘A simplex method for function minimization’, <em>The Computer Journal</em>, 7(4), pp. 308-313.</p></li>
+<li><p>Zeliade Systems (2009) <em>Quasi-explicit calibration of Gatheral’s SVI model</em>, Zeliade White Papers.</p></li>
+</ol>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="svi.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SVI模型</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="svi_intro.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SVI模型</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Yu Lu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Quasi-Explicit SVI技术文档</a><ul>
+<li><a class="reference internal" href="#svi">SVI 模型回顾</a></li>
+<li><a class="reference internal" href="#quasi-explicit">Quasi-Explicit 模型</a><ul>
+<li><a class="reference internal" href="#id1">内层优化</a></li>
+<li><a class="reference internal" href="#id2">外层优化</a><ul>
+<li><a class="reference internal" href="#id3">降维问题的闭式解</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">实证分析</a><ul>
+<li><a class="reference internal" href="#d">2D波动率曲线</a></li>
+<li><a class="reference internal" href="#id5">3D波动率曲面</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">总结</a></li>
+<li><a class="reference internal" href="#id7">参考文献</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=22eb4a5b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>

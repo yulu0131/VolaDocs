@@ -1,0 +1,443 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" />
+
+    <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+        <title>Commodity Option Volatility Surface using SABR - VolSurface 0.0.1a 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">VolSurface 0.0.1a 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">VolSurface 0.0.1a 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../wiki.html">期权Wiki</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 期权Wiki</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../wiki/commodity_option_info.html">商品期权</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wiki/financial_option_info.html">金融期权</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../model_description.html">波动率模型</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../svi/svi_intro.html">SVI模型</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of SVI模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../svi/svi.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sabr_intro.html">SABR随机波动率模型</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="Commodity-Option-Volatility-Surface-using-SABR">
+<h1>Commodity Option Volatility Surface using SABR<a class="headerlink" href="#Commodity-Option-Volatility-Surface-using-SABR" title="此标题的永久链接">#</a></h1>
+<section id="2-D-Input-Data">
+<h2>2-D Input Data<a class="headerlink" href="#2-D-Input-Data" title="此标题的永久链接">#</a></h2>
+<p>The l2309 option data, recorded on the 26th July, 2023, is utilized for data inputs. The corresponding close price for l2309 future is 8179.0. The implied volatility of this dataset was computed using the Black-Scholes model, incorporating a calendar-day basis for calculation.</p>
+<p>The graphical representation of the input-implied volatility is delineated in the subsequent illustration:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../sample_iv_data.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>strikes</th>
+      <th>ivs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7100</td>
+      <td>0.269966</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>7200</td>
+      <td>0.246217</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7300</td>
+      <td>0.222838</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7400</td>
+      <td>0.202008</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7500</td>
+      <td>0.184172</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>7600</td>
+      <td>0.169899</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7700</td>
+      <td>0.158302</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7800</td>
+      <td>0.150774</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>7900</td>
+      <td>0.145299</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>8000</td>
+      <td>0.141661</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>8100</td>
+      <td>0.139141</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>8200</td>
+      <td>0.137403</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>8300</td>
+      <td>0.135947</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>8400</td>
+      <td>0.134929</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>8500</td>
+      <td>0.133980</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>8600</td>
+      <td>0.133102</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>8700</td>
+      <td>0.132350</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<section id="Interpolate-ATM-vol">
+<h3>Interpolate ATM vol<a class="headerlink" href="#Interpolate-ATM-vol" title="此标题的永久链接">#</a></h3>
+<p><img alt="image0" src="../../_images/atm_interp.png" /></p>
+</section>
+</section>
+<section id="SABR-Model">
+<h2>SABR Model<a class="headerlink" href="#SABR-Model" title="此标题的永久链接">#</a></h2>
+<p>sabr model should have black calibration space, and normal calibration space where beta = 0, 1 respectively. When beta = 1/2, we have CIR calibration space. There are two calibration methods included in our implementation.</p>
+<p>The beta value is fixed for the below method： 1. optimize the sabr function directly with the <strong>non-linear least square</strong> method. 2. The alpha value is implied from atm volatility (West, 2005a), and the residuals can be formed as an objective function to find the local minimum value.</p>
+<p>The calibrated parameters should be compared and the corresponding results should be plotted. After the theoretical part is done, finish the implied volatility part using the normal and lognormal SABR model.</p>
+<section id="SABR----Fit-Market">
+<h3>SABR – Fit Market<a class="headerlink" href="#SABR----Fit-Market" title="此标题的永久链接">#</a></h3>
+</section>
+<section id="Bachelier-SABR-vs-Black-SABR">
+<h3>Bachelier SABR vs Black SABR<a class="headerlink" href="#Bachelier-SABR-vs-Black-SABR" title="此标题的永久链接">#</a></h3>
+<p>This section compares the normal SABR stochastic volatility model using alpha fit method. The fitted volatility is volatility from Normal SABR model.</p>
+<p><img alt="iv" src="../../_images/normal_vs_lognormal_sabr.png" /></p>
+</section>
+</section>
+<section id="3D-surface">
+<h2>3D surface<a class="headerlink" href="#3D-surface" title="此标题的永久链接">#</a></h2>
+<section id="Black-SABR-Volatility-Surface">
+<h3>Black SABR Volatility Surface<a class="headerlink" href="#Black-SABR-Volatility-Surface" title="此标题的永久链接">#</a></h3>
+<p><img alt="3d black" src="../../_images/black_3d.png" /></p>
+</section>
+<section id="Bachelier-SABR-Volatility-Surface">
+<h3>Bachelier SABR Volatility Surface<a class="headerlink" href="#Bachelier-SABR-Volatility-Surface" title="此标题的永久链接">#</a></h3>
+<p><img alt="bachelier 3d" src="../../_images/bachelier_3d.png" /></p>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Yu Lu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Commodity Option Volatility Surface using SABR</a><ul>
+<li><a class="reference internal" href="#2-D-Input-Data">2-D Input Data</a><ul>
+<li><a class="reference internal" href="#Interpolate-ATM-vol">Interpolate ATM vol</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#SABR-Model">SABR Model</a><ul>
+<li><a class="reference internal" href="#SABR----Fit-Market">SABR – Fit Market</a></li>
+<li><a class="reference internal" href="#Bachelier-SABR-vs-Black-SABR">Bachelier SABR vs Black SABR</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3D-surface">3D surface</a><ul>
+<li><a class="reference internal" href="#Black-SABR-Volatility-Surface">Black SABR Volatility Surface</a></li>
+<li><a class="reference internal" href="#Bachelier-SABR-Volatility-Surface">Bachelier SABR Volatility Surface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=22eb4a5b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>
