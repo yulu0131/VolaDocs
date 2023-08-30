@@ -47,17 +47,27 @@ $$
   - negative $\rho$, engendering a negative-sloping smile, adding its effects to those of $\beta$
   - positive $\rho$, engendering a positive effect on the slope of smile, and thus mitigating the effect of $\beta$ and offsetting them
 
-  SABR 模型是由 Hagan[1]在 2002 年提出的一种随机波动率模型，在抛弃了原始的 BSM
-  模型中对于波动率为某一常数的假定，假设隐含波动率同样是符合几何布朗运动的，并且
-  将隐含波动率设定为标的价格和合约行权价的函数，结合了隐含波动率修正模型的两种思
-  路（随机波动率模型和局部波动率模型），更为准确的动态刻画出吻合市场特征的隐含波
-  动率曲线。
 
-  
 
-  结合了隐含波动率修正模型的两种思路（随机波动率模型和局部波动率模型）
+## SABR模型计算方法
+### Black SABR Vol
+#### Hagan 2002
 
-  
+#### Obloj 2008
+
+
+### Bachelier SABR vol
+SABR 模型是由 Hagan[1]在 2002 年提出的一种随机波动率模型，在抛弃了原始的 BSM
+模型中对于波动率为某一常数的假定，假设隐含波动率同样是符合几何布朗运动的，并且
+将隐含波动率设定为标的价格和合约行权价的函数，结合了隐含波动率修正模型的两种思
+路（随机波动率模型和局部波动率模型），更为准确的动态刻画出吻合市场特征的隐含波
+动率曲线。
+
+
+
+结合了隐含波动率修正模型的两种思路（随机波动率模型和局部波动率模型）
+
+
 
 从形式上看，当在CEV模型中引入波动率 $\sigma$  的随机动态，即可推出SABR模型。简而言之，SABR是CEV模型的一种扩展形式，它不仅描述了资产价格的随机动态，还描述了波动率的随机动态。 
 
@@ -96,7 +106,13 @@ Heston与SABR两个模型采取不同的方法来解决这个问题。首先，H
 
 ###  2D波动率曲线
 
+![calibration_comp](../../figures/sabr_calibration_comp.png)
 
+![normal_lognormal](../../figures/normal_vs_lognormal_sabr.png)
 
 ### 3D波动率曲面
 
+![black_3d](../../figures/black_3d.png)
+
+
+![bachelier_3d](../../figures/bachelier_3d.png)
