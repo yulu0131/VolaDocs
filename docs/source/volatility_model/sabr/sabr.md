@@ -86,7 +86,8 @@ Hagan (2002)也提出了基于正态分布SABR模型的隐含波动率计算方�
 $$
 \begin{equation}
 \begin{aligned}
-	\sigma_{bachelier} &= v(\frac{F - K}{x(z)})[1  + \frac{(2- 3\rho^2)v^2}{24}T + ...]
+	\sigma_{bachelier(F \neq K )} &= v(\frac{F - K}{x(z)})[1  + \frac{(2- 3\rho^2)v^2}{24}T + ...] \\
+	\sigma_{bachelier(F=K)} &= \alpha[1  + \frac{(2- 3\rho^2)v^2}{24}T + ...]
 \end{aligned}
 \end{equation}
 $$
