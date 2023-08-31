@@ -109,7 +109,7 @@ Black SABR关于 $\alpha$的三次方程如下：
 
 $$
 \begin{equation}
-	\frac{(1-\beta)^2T}{24F^{2-2\beta}}a^3 + \frac{\rho\beta v T}{4F^{1-\beta}}a^2 + (1 + \frac{2 - 3\rho^2}{24} v^2 T)\alpha - \sigma_{black,atm}F^{1-\beta} = 0
+	\frac{(1-\beta)^2T}{24F^{2-2\beta}}a^3 + \frac{\rho\beta v T}{4F^{1-\beta}}a^2 + (1 + \frac{2 - 3\rho^2}{24} v^2 T)\alpha - \sigma_{atm}F^{1-\beta} = 0
 \end{equation}
 $$
 
@@ -119,7 +119,7 @@ Normal SABR关于 $\alpha$的三次方程如下：
 
 $$
 \begin{equation}
-	\frac{\beta(\beta - 2)T}{24F^{2-2\beta}}a^3 + \frac{\rho\beta v T}{4F^{1-\beta}}a^2 + (1 + \frac{2 - 3\rho^2}{24} v^2 T) \alpha- \sigma_{bachelier, atm}F^{-\beta} = 0
+	\frac{\beta(\beta - 2)T}{24F^{2-2\beta}}a^3 + \frac{\rho\beta v T}{4F^{1-\beta}}a^2 + (1 + \frac{2 - 3\rho^2}{24} v^2 T) \alpha- \sigma_{atm}F^{-\beta} = 0
 \end{equation}
 $$
 
