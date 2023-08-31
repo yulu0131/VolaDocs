@@ -106,6 +106,7 @@ $$
 根据2.1节，固定 $\beta = 1.0$，直接对$\rho$，$v$ 进行拟合。$\alpha$ 参数则是通过市场平价(ATM)波动率进行校准，假设ATM平价波动率为 $\sigma_{atm}$, West (2005a)表明 $\alpha$为三次方程的平方根。
 
 Black SABR关于 $\alpha$的三次方程如下：
+
 $$
 \begin{equation}
 	\frac{(1-\beta)^2T}{24F^{2-2\beta}}a^3 + \frac{\rho\beta v T}{4F^{1-\beta}}a^2 + (1 + \frac{2 - 3\rho^2}{24} v^2 T)\alpha - \sigma_{black,atm}F^{1-\beta} = 0
@@ -115,6 +116,7 @@ $$
 
 
 Normal SABR关于 $\alpha$的三次方程如下：
+
 $$
 \begin{equation}
 	\frac{\beta(\beta - 2)T}{24F^{2-2\beta}}a^3 + \frac{\rho\beta v T}{4F^{1-\beta}}a^2 + (1 + \frac{2 - 3\rho^2}{24} v^2 T) \alpha- \sigma_{bachelier, atm}F^{-\beta} = 0
