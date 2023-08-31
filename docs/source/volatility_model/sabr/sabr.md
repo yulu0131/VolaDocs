@@ -62,6 +62,7 @@ SABR模型本质上为波动率微笑模型，该模型天然无套利，不需�
 ### Black SABR
 
 在实际运用中通常假设标的资产遵循几何布朗运动。因此，假设$\beta = 1.0$。根据Hagan (2002)，$\beta$ 为1时，Black SABR模型隐含波动率公式可简化为：
+
 $$
 \begin{equation}
 \begin{aligned}
@@ -80,6 +81,7 @@ $$
 ### Bachelier(Normal) SABR
 
 Hagan (2002)也提出了基于正态分布SABR模型的隐含波动率计算方法，若要使用Bachelier SABR模型，将$\beta$设置为0，简化为：
+
 $$
 \begin{equation}
 \begin{aligned}
