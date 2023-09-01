@@ -3,13 +3,13 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" />
+<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="prev" title="SABR随机波动率模型：市场隐含波动率微笑" href="sabr.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
         <title>Commodity Option Volatility Surface using SABR - VolSurface 0.0.1a 文档</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
     
     
@@ -155,19 +155,17 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../wiki.html">期权Wiki</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 期权Wiki</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../wiki/commodity_option_info.html">商品期权</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../wiki/financial_option_info.html">金融期权</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../model_description.html">波动率模型</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../svi/svi_intro.html">SVI模型</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of SVI模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../svi/svi.html">比较分析</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="sabr_intro.html">SABR随机波动率模型</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../model_description.html">波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../svi/svi.html">比较分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sabr.html">SABR 技术文档</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">比较分析</a></li>
 </ul>
 </li>
 </ul>
@@ -338,16 +336,21 @@
 </div>
 <section id="Interpolate-ATM-vol">
 <h3>Interpolate ATM vol<a class="headerlink" href="#Interpolate-ATM-vol" title="此标题的永久链接">#</a></h3>
-<p><img alt="image0" src="../../_images/atm_interp.png" /></p>
+<p><img alt="image0" src="../../_images/sabr_calibration_comp.png" /></p>
 </section>
 </section>
 <section id="SABR-Model">
 <h2>SABR Model<a class="headerlink" href="#SABR-Model" title="此标题的永久链接">#</a></h2>
-<p>sabr model should have black calibration space, and normal calibration space where beta = 0, 1 respectively. When beta = 1/2, we have CIR calibration space. There are two calibration methods included in our implementation.</p>
-<p>The beta value is fixed for the below method： 1. optimize the sabr function directly with the <strong>non-linear least square</strong> method. 2. The alpha value is implied from atm volatility (West, 2005a), and the residuals can be formed as an objective function to find the local minimum value.</p>
+<p>The SABR model both have the black calibration space and the normal calibration space where beta = 0, 1 respectively. When beta = 1/2, we have CIR calibration space. There are two calibration methods included in our implementation.</p>
+<p>The beta value is fixed for the below method：</p>
+<ol class="arabic simple">
+<li><p>optimize the sabr function directly with the <strong>non-linear least square</strong> method. To simplify, find the <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\rho\)</span> at one time.</p></li>
+<li><p>The alpha value is implied from the atm volatility (West, 2005a), and the residuals can be formed as an objective function to find the local minimum value.</p></li>
+</ol>
 <p>The calibrated parameters should be compared and the corresponding results should be plotted. After the theoretical part is done, finish the implied volatility part using the normal and lognormal SABR model.</p>
 <section id="SABR----Fit-Market">
 <h3>SABR – Fit Market<a class="headerlink" href="#SABR----Fit-Market" title="此标题的永久链接">#</a></h3>
+<p><img alt="image0" src="../../_images/sabr_calibration_comp.png" /></p>
 </section>
 <section id="Bachelier-SABR-vs-Black-SABR">
 <h3>Bachelier SABR vs Black SABR<a class="headerlink" href="#Bachelier-SABR-vs-Black-SABR" title="此标题的永久链接">#</a></h3>
@@ -374,7 +377,17 @@
         
         <div class="related-pages">
           
-          
+          <a class="prev-page" href="sabr.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SABR随机波动率模型：市场隐含波动率微笑</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
