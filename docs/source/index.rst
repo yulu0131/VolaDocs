@@ -49,8 +49,6 @@ VolSurface
 商品期权波动率曲面界面
 ==================================
 
-.. note:: 新增Black(LogNormal)/Bachelier(Normal)SABR模型。
-
 .. image:: figures/commodity_iv.png
   :width: 700
 
