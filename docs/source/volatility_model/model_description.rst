@@ -24,3 +24,12 @@ SABR模型
    SABR 技术文档 <sabr/sabr>
    
    比较分析 <sabr/sabr_model>
+
+
+Local Vol模型
+---------------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   Local Volatility with FD <theoretical>
