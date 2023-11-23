@@ -172,10 +172,27 @@
 </ul>
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="local_vol_class.html">局域波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 局域波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">局域波动率模型</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">局域波动率模型</a></li>
 <li class="toctree-l3"><a class="reference internal" href="theoretical.html">基于有限差分法拟合的局域波动率模型</a></li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../svi/svi_class.html">SVI模型</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of SVI模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../svi/svi.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../sabr/sabr_class.html">SABR模型</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of SABR模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../sabr/sabr.html">SABR 技术文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sabr/sabr_model.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="local_vol_class.html">局域波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of 局域波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">局域波动率模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical.html">基于有限差分法拟合的局域波动率模型</a></li>
 </ul>
 </li>
 </ul>
@@ -230,7 +247,7 @@ d S_t = \mu S_tdt + \sigma_{L}(S_t, t)S_tdW_t
 <li><p><span class="math notranslate nohighlight">\(W_t\)</span>是布朗运动项</p></li>
 <li><p><span class="math notranslate nohighlight">\(\sigma_{L}\)</span>是随时间和标的资产价格变化的Dupire局域波动率</p></li>
 </ul>
-<p>虽然局域波动率模型的提出者当时并未考虑到随机波动率模型，但是局域波动率模型是随机波动率模型中的一个特殊分支，也是最简单的市场模型 (Bergomi, 2016)。局部波动率模型可以分为两类：一类是无参化的模型，即并未给出具体形式的波动率函数关系; 而另一类是给定局域波动率的表达形式，例如著名的CEV模型（在先前讨论SABR波动率模型曲面中有相应的介绍，<a class="reference external" href="https://voladocs.readthedocs.io/zh/latest/volatility_model/sabr/sabr.html#cev">原文链接</a>。</p>
+<p>虽然局域波动率模型的提出者当时并未考虑到随机波动率模型，但是局域波动率模型是随机波动率模型中的一个特殊分支，也是最简单的市场模型 (Bergomi, 2016)。局部波动率模型可以分为两类：一类是无参化的模型，即并未给出具体形式的波动率函数关系; 而另一类是给定局域波动率的表达形式，例如著名的CEV模型（在先前讨论SABR波动率模型曲面中有相应的介绍，<a class="reference external" href="https://voladocs.readthedocs.io/zh/latest/volatility_model/sabr/sabr.html#cev">原文链接</a>）。</p>
 <p>Dupire (1994)，Derman and Kani (1994) ，Rubinstein(1994) 提出的局域波动率模型具有一个无参化（non-parametric）的表达形式，即假设 <span class="math notranslate nohighlight">\(\sigma_{L}(S_t, t)\)</span>有一定的函数关系，但并没有具体的函数表达式，通过市场数据隐含推导得出。通过观测的期权市场数据，存在唯一的、能使模型的期权价值与市场价格保持一致的局域波动率函数，该局域波动率函数 (Dupire’s Equation) 表达形式如下：</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
