@@ -1,15 +1,15 @@
 <!doctype html>
-<html class="no-js" lang="zh-CN">
+<html class="no-js" lang="zh-CN" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" /><link rel="next" title="Quasi-Explicit SVI技术文档" href="svi/Quasi_explicit_techNotes.html" /><link rel="prev" title="金融期权" href="../wiki/financial_option_info.html" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" /><link rel="next" title="SVI模型" href="svi/svi_class.html" /><link rel="prev" title="金融期权" href="../wiki/financial_option_info.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2023.07.26 -->
+    <!-- Generated with Sphinx 6.0.1 and Furo 2023.09.10 -->
         <title>波动率模型 - VolSurface 0.0.1a 文档</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -134,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -161,11 +161,21 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svi/svi.html">比较分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr.html">SABR 技术文档</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr_model.html">比较分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="theoretical.html">Local Volatility with FD</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="svi/svi_class.html">SVI模型</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of SVI模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l3"><a class="reference internal" href="svi/svi.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="sabr/sabr_class.html">SABR模型</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of SABR模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="sabr/sabr.html">SABR 技术文档</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sabr/sabr_model.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="local_vol/local_vol_class.html">局域波动率模型</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 局域波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="local_vol/local_vol.html">局域波动率模型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="local_vol/theoretical.html">基于有限差分法拟合的局域波动率模型</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -196,7 +206,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -204,59 +214,25 @@
         <article role="main">
           <section id="id1">
 <h1>波动率模型<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h1>
-<section id="svi">
-<h2>SVI模型<a class="headerlink" href="#svi" title="此标题的永久链接">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html#svi">SVI 模型回顾</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html#quasi-explicit">Quasi-Explicit 模型</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html#id6">总结</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html#id7">参考文献</a></li>
+<li class="toctree-l1"><a class="reference internal" href="svi/svi_class.html">SVI模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="svi/svi.html">比较分析</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="svi/svi.html">比较分析</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="svi/svi.html#2D测试数据">2D测试数据</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svi/svi.html#结果比较">结果比较</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svi/svi.html#模型比较">模型比较</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svi/svi.html#3D-曲面比较">3D 曲面比较</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sabr/sabr_class.html">SABR模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sabr/sabr.html">SABR 技术文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sabr/sabr_model.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="local_vol/local_vol_class.html">局域波动率模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="local_vol/local_vol.html">局域波动率模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="local_vol/theoretical.html">基于有限差分法拟合的局域波动率模型</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</section>
-<section id="sabr">
-<h2>SABR模型<a class="headerlink" href="#sabr" title="此标题的永久链接">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="sabr/sabr.html">SABR 技术文档</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr.html#id1">概述</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr.html#id3">SABR模型计算方法</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr.html#id4">SABR模型校正</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr.html#id7">实证分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr.html#id8">参考文献</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sabr/sabr_model.html">比较分析</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr_model.html#2-D-Input-Data">2-D Input Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr_model.html#SABR-Model">SABR Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr/sabr_model.html#3D-surface">3D surface</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="local-vol">
-<h2>Local Vol模型<a class="headerlink" href="#local-vol" title="此标题的永久链接">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="theoretical.html">Local Volatility with FD</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="theoretical.html#Data-Visualization">Data Visualization</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
 </section>
 
         </article>
@@ -264,12 +240,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="svi/Quasi_explicit_techNotes.html">
+          <a class="next-page" href="svi/svi_class.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Quasi-Explicit SVI技术文档</div>
+                <div class="title">SVI模型</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -302,38 +278,17 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">波动率模型</a><ul>
-<li><a class="reference internal" href="#svi">SVI模型</a></li>
-<li><a class="reference internal" href="#sabr">SABR模型</a></li>
-<li><a class="reference internal" href="#local-vol">Local Vol模型</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=22eb4a5b"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="../_static/translations.js?v=beaddf03"></script>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script src="../_static/translations.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>
 </html>

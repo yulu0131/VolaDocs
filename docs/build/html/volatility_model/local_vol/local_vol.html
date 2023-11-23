@@ -1,0 +1,488 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="next" title="Test Dataset" href="theoretical.html" /><link rel="prev" title="Commodity Option Volatility Surface using SABR" href="../sabr/sabr_model.html" />
+
+    <!-- Generated with Sphinx 6.0.1 and Furo 2023.09.10 -->
+        <title>基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例 - VolSurface 0.0.1a 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">VolSurface 0.0.1a 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">VolSurface 0.0.1a 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="搜索" name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../wiki.html">期权Wiki</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 期权Wiki</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../wiki/commodity_option_info.html">商品期权</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wiki/financial_option_info.html">金融期权</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../model_description.html">波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../svi/svi.html">比较分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sabr/sabr.html">SABR 技术文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sabr/sabr_model.html">比较分析</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">局域波动率模型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="theoretical.html">基于有限差分法拟合的局域波动率模型</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h1>
+<section id="id2">
+<h2>理论背景<a class="headerlink" href="#id2" title="此标题的永久链接">#</a></h2>
+<p>Black-Scholes模型中假设的波动率对所有的行权价和到期日都是恒定的，通过场内期权的市场价格可以反算得出基于Black-Scholes模型的隐含波动率。在实际观测中，隐含波动率依赖于行权价和到期日，会形成一个所谓的“隐含波动率曲面”。为了解释这一现象，Dupire (1994) 提出了一种从市场上观察到的期权价格推导出局域波动率函数的方法。局域波动率模型假设标的资产遵循扩散过程，并且资产的波动性是资产价格和时间的函数：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+d S_t = \mu S_tdt + \sigma_{L}(S_t, t)S_tdW_t
+\]</div>
+</div>
+<p>其中，</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(S_t\)</span> 是标的资产价格</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mu\)</span> 是漂移项</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_t\)</span>是布朗运动项</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_{L}\)</span>是随时间和标的资产价格变化的Dupire局域波动率</p></li>
+</ul>
+<p>虽然局域波动率模型的提出者当时并未考虑到随机波动率模型，但是局域波动率模型是随机波动率模型中的一个特殊分支，也是最简单的市场模型 (Bergomi, 2016)。局部波动率模型可以分为两类：一类是无参化的模型，即并未给出具体形式的波动率函数关系; 而另一类是给定局域波动率的表达形式，例如著名的CEV模型（在先前讨论SABR波动率模型曲面中有相应的介绍，<a class="reference external" href="https://voladocs.readthedocs.io/zh/latest/volatility_model/sabr/sabr.html#cev">原文链接</a>。</p>
+<p>Dupire (1994)，Derman and Kani (1994) ，Rubinstein(1994) 提出的局域波动率模型具有一个无参化（non-parametric）的表达形式，即假设 <span class="math notranslate nohighlight">\(\sigma_{L}(S_t, t)\)</span>有一定的函数关系，但并没有具体的函数表达式，通过市场数据隐含推导得出。通过观测的期权市场数据，存在唯一的、能使模型的期权价值与市场价格保持一致的局域波动率函数，该局域波动率函数 (Dupire’s Equation) 表达形式如下：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\sigma_{L}^2(K, T, S_0) = \frac{\frac{\partial C}{\partial T}}{0.5K^2\frac{\partial^2{C}}{\partial K^2}} \\
+\end{split}\]</div>
+</div>
+<p>其中，<span class="math notranslate nohighlight">\(C\)</span> 为 <span class="math notranslate nohighlight">\(C(F_T,K,T)\)</span>。</p>
+</section>
+<section id="id3">
+<h2>局域波动率模型定价步骤<a class="headerlink" href="#id3" title="此标题的永久链接">#</a></h2>
+<p><img alt="LocalVolPricing" src="../../_images/LocalVolPricing.png" /></p>
+<p>上图展示了采用局域波动率模型定价的基本步骤：首先，采用Frengler (2009)的平滑方法对市场数据进行处理，避免由于套利机会而出现的负 <span class="math notranslate nohighlight">\(\sigma_{L}^2\)</span>。随后，通过Gatheral和Lynch (2004)的计算公式计算得出局域波动率曲面。最后，针对每一个离散观察的点，对相应的局域波动率曲线进行插值得到模拟过程中对应的局域波动率 <span class="math notranslate nohighlight">\(\sigma(S, t), t\in[t0, t1, .., T]\)</span>。通过蒙特卡洛模拟，计算得出相应期权结构的现值及其希腊值。</p>
+<section id="id4">
+<h3>无套利光滑隐含波动率曲面<a class="headerlink" href="#id4" title="此标题的永久链接">#</a></h3>
+<p>然而，局域波动率的正确定价需要一个无套利的隐含波动率曲面。若曲面存在套利机会，可能会导致计算出的转换概率为负 (Frengler, 2009)。为了解决这一问题，采用Frengler (2009)提出的无套利隐含波动率曲面平滑方法，该方法计算成本低廉，能够快速拟合出无套利隐含波动率曲面。</p>
+<p>Frengler (2009) 采用的为2000年6月13日的DAX看涨期权隐含波动率数据，原文献复现结果如下：</p>
+<p><img alt="Frenlger" src="../../_images/frengler.png" /></p>
+<p>为了更贴合国内市场行情，采用场内金融隐含波动率曲面计算相应的局域波动率，通过Frengler方法计算的2023年10月25日沪深300股指期权的隐含波动率曲面拟合结果如下：</p>
+<p><img alt="smoothed_ivs" src="../../_images/smoothed_ivs.png" /></p>
+</section>
+<section id="id5">
+<h3>局域波动率曲面<a class="headerlink" href="#id5" title="此标题的永久链接">#</a></h3>
+<p>通过平滑后的无套利隐含波动率曲面，进而能够计算相应的局域波动率。采用市场隐含波动率计算局域波动率的公式如下（Gatheral and Lynch, 2004）:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+v_L = \frac{\frac{\partial w}{\partial T}}{1- \frac{y}{w} \frac{\partial w}{\partial y} + \frac{1}{4}(-\frac{1}{4} - \frac{1}{w}+ \frac{y^2}{w^2})(\frac{\partial w}{\partial y})^2 + \frac{1}{2} \frac{\partial^2 w}{\partial y^2}}
+\]</div>
+</div>
+<p>其中，</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(w(S_0, K, T) = \sigma_{BS}^2(S_0, K, T)T\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(y = \ln(\frac{K}{F_T})\)</span></p></li>
+</ul>
+<p>根据期权存续期限，计算每一个交易日所对应的局域波动率曲面。以500个交易日，年交易日天数为244天为例，拟合后的局域波动率曲面如下:</p>
+<p><img alt="" src="../../_images/LocalVolSurf.png" /></p>
+</section>
+</section>
+<section id="id6">
+<h2>雪球测试条款<a class="headerlink" href="#id6" title="此标题的永久链接">#</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>降敲型雪球条款</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>开始日期</p></td>
+<td><p>2021年10月13日</p></td>
+</tr>
+<tr class="row-odd"><td><p>结束日期</p></td>
+<td><p>2022年10月13日</p></td>
+</tr>
+<tr class="row-even"><td><p>初始价格</p></td>
+<td><p>100.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>敲出方向</p></td>
+<td><p>向上敲出向下敲入，<strong>UP_OUT_DOWN_IN</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>敲出观察日</p></td>
+<td><p>2021-11-15, 2021-12-13, 2022-01-13, 2022-02-14, <br />2022-03-14, 2018-04-13, 2022-05-13, 2022-06-13, <br />2022-07-13, 2022-08-15, 2022-09-13, 2022-10-13</p></td>
+</tr>
+<tr class="row-odd"><td><p>敲出障碍价格</p></td>
+<td><p>103.0</p></td>
+</tr>
+<tr class="row-even"><td><p>敲出票息</p></td>
+<td><p>年化 15%</p></td>
+</tr>
+<tr class="row-odd"><td><p>红利票息</p></td>
+<td><p>年化 18%</p></td>
+</tr>
+<tr class="row-even"><td><p>敲入观察频率</p></td>
+<td><p>按日观察</p></td>
+</tr>
+<tr class="row-odd"><td><p>敲入障碍价格</p></td>
+<td><p>80.0</p></td>
+</tr>
+<tr class="row-even"><td><p>敲入赔付</p></td>
+<td><p>-PUT，行权价100%</p></td>
+</tr>
+<tr class="row-odd"><td><p>票息计息规则</p></td>
+<td><p>30/360</p></td>
+</tr>
+<tr class="row-even"><td><p>日历</p></td>
+<td><p>A股交易日历</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="black-scholes">
+<h3>Black-Scholes 定价参数<a class="headerlink" href="#black-scholes" title="此标题的永久链接">#</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Spot</p></th>
+<th class="head"><p>r</p></th>
+<th class="head"><p>b</p></th>
+<th class="head"><p>vol</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>100.0</p></td>
+<td><p>0.02</p></td>
+<td><p>0.0</p></td>
+<td><p>0.2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id7">
+<h3>定价结果比较<a class="headerlink" href="#id7" title="此标题的永久链接">#</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Black-Scholes模型</p></th>
+<th class="head"><p>局域波动率 –Euler离散</p></th>
+<th class="head"><p>局域波动率 –Milstein离散</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PV</p></td>
+<td><p>0.124199</p></td>
+<td><p>-0.663596</p></td>
+<td><p>-0.820962</p></td>
+</tr>
+<tr class="row-odd"><td><p>DELTA</p></td>
+<td><p>0.274492</p></td>
+<td><p>0.423378</p></td>
+<td><p>0.420788</p></td>
+</tr>
+<tr class="row-even"><td><p>GAMMA</p></td>
+<td><p>-0.0555351</p></td>
+<td><p>-0.0827226</p></td>
+<td><p>-0.0722836</p></td>
+</tr>
+<tr class="row-odd"><td><p>THETA</p></td>
+<td><p>16.6295</p></td>
+<td><p>11.3222</p></td>
+<td><p>11.8514</p></td>
+</tr>
+<tr class="row-even"><td><p>VEGA</p></td>
+<td><p>-57.9549</p></td>
+<td><p>-47.5611</p></td>
+<td><p>-46.8632</p></td>
+</tr>
+<tr class="row-odd"><td><p>RHO</p></td>
+<td><p>31.1487</p></td>
+<td><p>29.9097</p></td>
+<td><p>28.6283</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2>总结<a class="headerlink" href="#id8" title="此标题的永久链接">#</a></h2>
+<p>本文研究探讨了基于局域波动率曲面的蒙特卡洛模拟定价方法，局域波动率模型可以更精确地拟合市场上观察到的期权价格。通过使用 Dupire 公式以及市场上的隐含波动率数据，引入无套利约束条件，进而能够从市场价格中提取局域波动率，并应用在场外期权的定价中。虽然局域波动率模型在捕捉市场微观结构和动态变化具有一定的优势，但在对冲实践中仍存在一些问题。由于局域波动率是从市场价格中反算得出，采用该方法定价在不同的市场情况中可能表现出不稳定性，从而导致对冲结果不精确。</p>
+</section>
+<section id="id9">
+<h2>参考文献<a class="headerlink" href="#id9" title="此标题的永久链接">#</a></h2>
+<p>[1] Bergomi, L. (2015). Stochastic Volatility Modeling (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/b19649.</p>
+<p>[2] Derman, E. and I. Kani (1994). Riding On A Smile, RISK, 7 (February), 32-39.</p>
+<p>[3] Dupire, B. “Pricing with a Smile.” <em>Risk.</em> Vol. 7, Number 1, 1994, pp. 18–20.</p>
+<p>[4] Gatheral, J. and Lynch, M. (2004) ‘Lecture 1: Stochastic Volatility and Local Volatility’.</p>
+<p>[5] Fengler, M. (2009) ‘Arbitrage-free smoothing of the implied volatility surface’, <em>Quantitative Finance</em>, 9, pp. 417–428. doi: 10.1080/14697680802595585.</p>
+<p>[6] Rubinstein, M. (1994). Implied Binomial Trees, <em>The Journal of Finance</em>, 49 (July), 771-818.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="theoretical.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Test Dataset</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../sabr/sabr_model.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Commodity Option Volatility Surface using SABR</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Yu Lu
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例</a><ul>
+<li><a class="reference internal" href="#id2">理论背景</a></li>
+<li><a class="reference internal" href="#id3">局域波动率模型定价步骤</a><ul>
+<li><a class="reference internal" href="#id4">无套利光滑隐含波动率曲面</a></li>
+<li><a class="reference internal" href="#id5">局域波动率曲面</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">雪球测试条款</a><ul>
+<li><a class="reference internal" href="#black-scholes">Black-Scholes 定价参数</a></li>
+<li><a class="reference internal" href="#id7">定价结果比较</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">总结</a></li>
+<li><a class="reference internal" href="#id9">参考文献</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/translations.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </body>
+</html>
