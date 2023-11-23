@@ -14,7 +14,6 @@ VolSurface
    :hidden:
 
    期权Wiki <wiki>
-   波动率模型 <volatility_model/model_description>
 
 支持场内商品期权和权益类期权的波动率模型，可在线获取数据并支持数据可视化功能。
 
