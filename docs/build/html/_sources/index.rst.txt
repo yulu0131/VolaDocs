@@ -6,7 +6,7 @@
 VolSurface
 ======================================
 
-.. warning:: This documentation updates on 1st September2023!
+.. warning:: This documentation updates on 23th Novemember 2023!
 
 
 .. toctree::
@@ -20,22 +20,17 @@ VolSurface
 
 
 波动率模型
-------------------------
+-----------------------------------
 
-#. 隐含波动率
+.. toctree::
+   :maxdepth: 2
 
-#. SVI
+   SVI模型 <volatility_model/svi/svi_class>
+   
+   SABR模型 <volatility_model/sabr/sabr_class>
 
-    * Surface SVI
-
-    * Quasi-Explicit SVI
-
-#. SABR
-
-    * Black SABR 
-
-    * Bachelier SABR
-
+   局域波动率模型 <volatility_model/local_vol/local_vol_class>
+   
 
 终端调用命令
 -----------------------
