@@ -15,20 +15,28 @@ VolSurface
 
    期权Wiki <wiki>
 
+   波动率模型 <volatility_model/model_description>
+
 支持场内商品期权和权益类期权的波动率模型，可在线获取数据并支持数据可视化功能。
 
 
 波动率模型
------------------------------------
+------------------------
 
-.. toctree::
-   :maxdepth: 2
+#. 隐含波动率
 
-   SVI模型 <volatility_model/svi/svi_class>
-   
-   SABR模型 <volatility_model/sabr/sabr_class>
+#. SVI
 
-   局域波动率模型 <volatility_model/local_vol/local_vol_class>
+    * Surface SVI
+
+    * Quasi-Explicit SVI
+
+#. SABR
+
+    * Black SABR 
+
+    * Bachelier SABR
+
    
 
 终端调用命令
