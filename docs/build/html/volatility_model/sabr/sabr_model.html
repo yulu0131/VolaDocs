@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="next" title="广义期权通用框架之局域波动率模型定价" href="../local_vol/local_vol.html" /><link rel="prev" title="SABR随机波动率模型：市场隐含波动率微笑" href="sabr.html" />
+<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="next" title="局域波动率模型" href="../local_vol/local_vol_class.html" /><link rel="prev" title="SABR随机波动率模型：市场隐含波动率微笑" href="sabr.html" />
 
     <!-- Generated with Sphinx 6.0.1 and Furo 2023.09.10 -->
         <title>Commodity Option Volatility Surface using SABR - VolSurface 0.0.1a 文档</title>
@@ -161,12 +161,21 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../model_description.html">波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../svi/svi.html">比较分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sabr.html">SABR 技术文档</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">比较分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../local_vol/local_vol.html">局域波动率模型</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../theoretical.html">Local Volatility with FD</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../svi/svi_class.html">SVI模型</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of SVI模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../svi/Quasi_explicit_techNotes.html">Quasi-Explicit SVI技术文档</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../svi/svi.html">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="sabr_class.html">SABR模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of SABR模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sabr.html">SABR 技术文档</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">比较分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../local_vol/local_vol_class.html">局域波动率模型</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 局域波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../local_vol/local_vol.html">局域波动率模型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../local_vol/theoretical.html">基于有限差分法拟合的局域波动率模型</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -594,7 +603,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="Interpolate-ATM-vol">
 <h3>Interpolate ATM vol<a class="headerlink" href="#Interpolate-ATM-vol" title="此标题的永久链接">#</a></h3>
-<p><img alt="image0" src="../../_images/sabr_calibration_comp.png" /></p>
+<p><img alt="image0" src="../../_images/atm_interp.png" /></p>
 </section>
 </section>
 <section id="SABR-Model">
@@ -608,7 +617,7 @@ div.rendered_html tbody tr:hover {
 <p>The calibrated parameters should be compared and the corresponding results should be plotted. After the theoretical part is done, finish the implied volatility part using the normal and lognormal SABR model.</p>
 <section id="SABR-–-Fit-Market">
 <h3>SABR – Fit Market<a class="headerlink" href="#SABR-–-Fit-Market" title="此标题的永久链接">#</a></h3>
-<p><img alt="image0" src="../../_images/sabr_calibration_comp.png" /></p>
+<p><img alt="fit" src="../../_images/sabr_calibration_comp.png" /></p>
 </section>
 <section id="Bachelier-SABR-vs-Black-SABR">
 <h3>Bachelier SABR vs Black SABR<a class="headerlink" href="#Bachelier-SABR-vs-Black-SABR" title="此标题的永久链接">#</a></h3>
@@ -634,12 +643,12 @@ div.rendered_html tbody tr:hover {
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../local_vol/local_vol.html">
+          <a class="next-page" href="../local_vol/local_vol_class.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">广义期权通用框架之局域波动率模型定价</div>
+                <div class="title">局域波动率模型</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
