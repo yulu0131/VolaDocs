@@ -7,4 +7,4 @@
 
    局域波动率模型 <local_vol>
    
-   基于有限差分法拟合的局域波动率模型 <theoretical>
+   基于有限差分法拟合的局域波动率模型 <local_vol_fd>

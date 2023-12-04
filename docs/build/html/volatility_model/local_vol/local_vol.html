@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="next" title="Test Dataset" href="theoretical.html" /><link rel="prev" title="局域波动率模型" href="local_vol_class.html" />
+<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="next" title="基于有限差分法的局域波动率模型定价" href="local_vol_fd.html" /><link rel="prev" title="局域波动率模型" href="local_vol_class.html" />
 
     <!-- Generated with Sphinx 6.0.1 and Furo 2023.09.10 -->
         <title>基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例 - VolSurface 0.0.1a 文档</title>
@@ -173,7 +173,7 @@
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="local_vol_class.html">局域波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 局域波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">局域波动率模型</a></li>
-<li class="toctree-l3"><a class="reference internal" href="theoretical.html">基于有限差分法拟合的局域波动率模型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="local_vol_fd.html">基于有限差分法拟合的局域波动率模型</a></li>
 </ul>
 </li>
 </ul>
@@ -248,7 +248,7 @@ d S_t = \mu S_tdt + \sigma_{L}(S_t, t)S_tdW_t
 <h3>无套利光滑隐含波动率曲面<a class="headerlink" href="#id4" title="此标题的永久链接">#</a></h3>
 <p>然而，局域波动率的正确定价需要一个无套利的隐含波动率曲面。若曲面存在套利机会，可能会导致计算出的转换概率为负 (Frengler, 2009)。为了解决这一问题，采用Frengler (2009)提出的无套利隐含波动率曲面平滑方法，该方法计算成本低廉，能够快速拟合出无套利隐含波动率曲面。</p>
 <p>Frengler (2009) 采用的为2000年6月13日的DAX看涨期权隐含波动率数据，原文献复现结果如下：</p>
-<p><img alt="Frenlger" src="../../_images/frengler.png" /></p>
+<p><img alt="Frengler" src="../../_images/frengler.png" /></p>
 <p>为了更贴合国内市场行情，采用场内金融期权隐含波动率曲面计算相应的局域波动率，通过Frengler方法计算的2023年10月25日沪深300股指期权的隐含波动率曲面拟合结果如下：</p>
 <p><img alt="smoothed_ivs" src="../../_images/smoothed_ivs.png" /></p>
 </section>
@@ -410,12 +410,12 @@ v_L = \frac{\frac{\partial w}{\partial T}}{1- \frac{y}{w} \frac{\partial w}{\par
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="theoretical.html">
+          <a class="next-page" href="local_vol_fd.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Test Dataset</div>
+                <div class="title">基于有限差分法的局域波动率模型定价</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

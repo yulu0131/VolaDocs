@@ -37,7 +37,7 @@ $$
 
 Frengler (2009) 采用的为2000年6月13日的DAX看涨期权隐含波动率数据，原文献复现结果如下：
 
-![Frenlger](../../figures/local_vol_fig/frengler.png)
+![Frengler](../../figures/local_vol_fig/frengler.png)
 
 为了更贴合国内市场行情，采用场内金融期权隐含波动率曲面计算相应的局域波动率，通过Frengler方法计算的2023年10月25日沪深300股指期权的隐含波动率曲面拟合结果如下：
 

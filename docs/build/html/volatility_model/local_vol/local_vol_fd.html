@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="next" title="基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例" href="local_vol.html" /><link rel="prev" title="Commodity Option Volatility Surface using SABR" href="../sabr/sabr_model.html" />
+<link rel="index" title="索引" href="../../genindex.html" /><link rel="search" title="搜索" href="../../search.html" /><link rel="prev" title="基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例" href="local_vol.html" />
 
     <!-- Generated with Sphinx 6.0.1 and Furo 2023.09.10 -->
-        <title>局域波动率模型 - VolSurface 0.0.1a 文档</title>
+        <title>基于有限差分法的局域波动率模型定价 - VolSurface 0.0.1a 文档</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -134,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -171,9 +171,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../sabr/sabr_model.html">比较分析</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">局域波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 局域波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="local_vol_class.html">局域波动率模型</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 局域波动率模型</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="local_vol.html">局域波动率模型</a></li>
-<li class="toctree-l3"><a class="reference internal" href="local_vol_fd.html">基于有限差分法拟合的局域波动率模型</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">基于有限差分法拟合的局域波动率模型</a></li>
 </ul>
 </li>
 </ul>
@@ -206,34 +206,72 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="id1">
-<h1>局域波动率模型<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="local_vol.html">局域波动率模型</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="local_vol.html#id2">理论背景</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol.html#id3">局域波动率模型定价步骤</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol.html#id6">标准雪球定价</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol.html#id8">总结</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol.html#id9">参考文献</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="local_vol_fd.html">基于有限差分法拟合的局域波动率模型</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="local_vol_fd.html#id2">简介</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol_fd.html#id3">拟合方法</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol_fd.html#id4">实证分析</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol_fd.html#id8">结论</a></li>
-<li class="toctree-l2"><a class="reference internal" href="local_vol_fd.html#id9">参考文献</a></li>
-</ul>
-</li>
-</ul>
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>基于有限差分法的局域波动率模型定价<a class="headerlink" href="#id1" title="此标题的永久链接">#</a></h1>
+<section id="id2">
+<h2>简介<a class="headerlink" href="#id2" title="此标题的永久链接">#</a></h2>
+<p>本文通过一种基于有限差分法的局域波动率计算方法重构局域波动率曲面，该方法较之前的文章更为高效、精确，无需计算并平滑无套利隐含波动率曲面。</p>
+<p><strong>Kwak et al. (2022)定价原理</strong>：采用广义Black-Scholes方程和有限差分法对广义Black-Scholes方程进行数值求解，通过最小化成本函数对理论期权价格和市场期权价格进行拟合，该成本函数的表达形式为理论期权价格与市场期权价格差异的平方，将未知局域波动率的点置于到期日中间从而实现高效计算。通过实证分析，用该方法重构的局部波动率曲面简单高效。</p>
+</section>
+<section id="id3">
+<h2>拟合方法<a class="headerlink" href="#id3" title="此标题的永久链接">#</a></h2>
+<p>重构局部波动率函数 <span class="math notranslate nohighlight">\(\sigma(S, t)\)</span>的广义BS方程如下：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mu(S, \tau)}{\partial \tau} = \frac{1}{2} [\sigma(S, \tau)S]^2\frac{\partial^2 \mu(S, \tau)}{\partial S^2} + rS\frac{\partial \mu (S, \tau)}{\partial S} - r\mu (S, \tau)
+\]</div>
 </div>
+<p>对于 <span class="math notranslate nohighlight">\((S, \tau) \in \Omega \times （0, T ]\)</span>, 初始条件为<span class="math notranslate nohighlight">\(\mu(S, 0)\)</span>，其中<span class="math notranslate nohighlight">\(\tau = T - t\)</span>，<span class="math notranslate nohighlight">\(\mu(S, t)\)</span> 为期权价值。采用隐式差分法离散上述方程，通过拟合得出相应的局域波动率模型<span class="math notranslate nohighlight">\(\sigma(S,t)\)</span>，进而能够对场外期权进行定价。</p>
+</section>
+<section id="id4">
+<h2>实证分析<a class="headerlink" href="#id4" title="此标题的永久链接">#</a></h2>
+<section id="id5">
+<h3>原文献结果<a class="headerlink" href="#id5" title="此标题的永久链接">#</a></h3>
+<p>原文献仅对看涨期权进行了实证检验，Kwak et al. (2022) 局部波动率曲面仅适用于看涨期权。首先，采用原文的数据重构局部波动率曲面并与市场价格进行对比，复现原文献的结果。Kwak et al. (2022)中采用的CPU硬件为Intel® Core™ i9-12900K CPU &#64; 3.70GHz处理器，拟合45个真实市场数据点的CPU计算速度为<strong>9.58s</strong>。本文采用的测试机器为Intel® Core™ i7-8700K CPU &#64; 3.70GHz，进行相关优化后，CPU计算速度为<strong>3.3s</strong>。</p>
+<p>采用2020年1月14日的KOSPI 200指数看涨期权的拟合结果如下：
+<img alt="reference dataset1" src="../../_images/localVolDataset1.png" /></p>
+<p>采用2022年4月8日的KOSPI 200指数看涨期权的拟合结果如下：</p>
+<p><img alt="reference dataset2" src="../../_images/localVolDataset2.png" /></p>
+</section>
+<section id="id6">
+<h3>提升优化<a class="headerlink" href="#id6" title="此标题的永久链接">#</a></h3>
+<p>为了实现该方法的应用性，进一步提升计算效率。对输入数据也进行了处理，采用平价公式（Put-Call Parity）计算标的市场价格，重构的局部波动率曲面能够同时适用于看涨和看跌期权。根据市场情况，挂钩标的资产在不同的行权价下的当前市场价值的现货价格并不是一个常数，在拟合过程中会大幅降低计算速率。平价公式的计算形式如下：</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+S = C-P+PV(K)
+\]</div>
+</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(S\)</span> 为挂钩标的资产当前市场价值的现货价格</p></li>
+<li><p><span class="math notranslate nohighlight">\(PV(K)\)</span> 为行权价的现值</p></li>
+<li><p><span class="math notranslate nohighlight">\(C\)</span>为看涨期权的市场价</p></li>
+<li><p><span class="math notranslate nohighlight">\(P\)</span>为看跌期权的市场价</p></li>
+</ul>
+<section id="id7">
+<h4>以沪深300股指期权为例<a class="headerlink" href="#id7" title="此标题的永久链接">#</a></h4>
+<p>采用2023年10月25日沪深300股指期权拟合局域波动率模型，并用该模型定价场内看涨和看跌期权。针对计算过程进行相关优化后，CPU计算速度为37.4s。计算结果如下:</p>
+<p><img alt="IO option" src="../../_images/RealMarket.png" /></p>
+<p>与原始的隐含波动率曲面的对比如下：</p>
+<p><img alt="IV Comparison" src="../../_images/IVtoFD.png" /></p>
+</section>
+</section>
+</section>
+<section id="id8">
+<h2>结论<a class="headerlink" href="#id8" title="此标题的永久链接">#</a></h2>
+<p>本文基于Kwak et al. (2022)方法以及有限差分法直接拟合局域波动率曲面，无需反算隐含波动率并平滑存在套利机会的市场价格点，更有效、直接地描述市场的动态变化情况。然而，原文仅考虑看涨期权的波动率曲面，不能直接作用于场外衍生品的定价中。在金融市场中，同一个执行价下的看涨和看跌期权应为同一个波动率曲面。因此，通过平价公式计算出的标的当前现货价格为入参，从而拟合出的局域波动率曲面能够同时定价场内看涨和看跌期权，但是计算速率仍需进一步提高。</p>
+</section>
+<section id="id9">
+<h2>参考文献<a class="headerlink" href="#id9" title="此标题的永久链接">#</a></h2>
+<p>[1] Kwak S, Hwang Y, Choi Y, Wang J, Kim S, Kim J. Reconstructing the Local Volatility Surface from Market Option Prices. <em>Mathematics</em>. 2022; 10(14):2537.</p>
+</section>
 </section>
 
         </article>
@@ -241,23 +279,15 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="local_vol.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="../sabr/sabr_model.html">
+          
+          <a class="prev-page" href="local_vol.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Commodity Option Volatility Surface using SABR</div>
+                <div class="title">基于局域波动率模型的蒙特卡洛模拟定价：以雪球期权为例</div>
                 
               </div>
             </a>
@@ -279,8 +309,38 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">基于有限差分法的局域波动率模型定价</a><ul>
+<li><a class="reference internal" href="#id2">简介</a></li>
+<li><a class="reference internal" href="#id3">拟合方法</a></li>
+<li><a class="reference internal" href="#id4">实证分析</a><ul>
+<li><a class="reference internal" href="#id5">原文献结果</a></li>
+<li><a class="reference internal" href="#id6">提升优化</a><ul>
+<li><a class="reference internal" href="#id7">以沪深300股指期权为例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">结论</a></li>
+<li><a class="reference internal" href="#id9">参考文献</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -291,5 +351,7 @@
     <script src="../../_static/scripts/furo.js"></script>
     <script src="../../_static/translations.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>
